@@ -30,7 +30,7 @@ namespace SchereSteinPapier
                 Continue = "";
                 Console.WriteLine("Gib deinen Zug ein: ");
                 PlayerMove = Console.ReadLine();
-                //Console.WriteLine("Compute move is: " + Moves[PCmoveN]);
+                //Console.WriteLine("Computer move is: " + Moves[PCmoveN]);
 
                     if (PlayerMove == Moves[PCmoveN])
                 {
