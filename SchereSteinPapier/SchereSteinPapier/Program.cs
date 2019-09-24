@@ -34,7 +34,7 @@ namespace SchereSteinPapier
 
                     if (PlayerMove == Moves[PCmoveN])
                 {
-                    Console.WriteLine("Gleicher Zug - Patt");
+                    Console.WriteLine("Gleicher Zug - Runde wird wiederholt");
                     Continue = "Y";
                 }
 
