@@ -8,7 +8,7 @@ namespace SchereSteinPapier
 {
     class Program
     {
-        //enum Moves { Schere, Stein, Papier, Echse, Spock, };
+        
 
         static void Main(string[] args)
         {
