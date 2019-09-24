@@ -23,16 +23,19 @@ namespace SchereSteinPapier
             Console.Write("Gib deinen Spielernamen ein: ");
             PlayerName = Console.ReadLine();
 
-            while (Continue != "N")     {
+            while (Continue != "N")
+            {
                 Random rnd = new Random();
                 int PCmoveN = rnd.Next(0, 4);
+                Continue = "";
                 Console.WriteLine("Gib deinen Zug ein: ");
                 PlayerMove = Console.ReadLine();
                 //Console.WriteLine("Compute move is: " + Moves[PCmoveN]);
 
                     if (PlayerMove == Moves[PCmoveN])
                 {
-                    Console.WriteLine("Gleicher Zug");
+                    Console.WriteLine("Gleicher Zug - Patt");
+                    Continue = "Y";
                 }
 
                     else if (PlayerMove == "Schere" && Moves[PCmoveN] == "Papier")
@@ -126,24 +129,27 @@ namespace SchereSteinPapier
                     Console.WriteLine("Spock verdampft Stein - Computer gewinnt");
                 }
 
-                else if (PlayerMove == "Stein" && Moves[PCmoveN] == "Schere")
+                    else if (PlayerMove == "Stein" && Moves[PCmoveN] == "Schere")
                 {
                     Console.WriteLine("Stein zertrümmert Schere - " + PlayerName + " gewinnt");
                 }
 
-                else if (PlayerMove == "Schere" && Moves[PCmoveN] == "Stein")
+                    else if (PlayerMove == "Schere" && Moves[PCmoveN] == "Stein")
                 {
                     Console.WriteLine("Stein zertrümmert Schere - Computer gewinnt");
                 }
 
-                else
+                    else 
                 {
                     Console.WriteLine("ungültiger Zug");
                 }
-
-                Console.WriteLine("Möchtest du weiter spielen? (Y/N): ");
-                Continue = Console.ReadLine();
-                                        }
+                    if (Continue != "Y")
+                {
+                    Console.WriteLine("Möchtest du weiter spielen? (Y/N): ");
+                    Continue = Console.ReadLine();
+                }
+                
+            }
 
 
 
