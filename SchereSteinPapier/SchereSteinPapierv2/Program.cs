@@ -19,7 +19,7 @@ namespace SchereSteinPapierv2
         }
         static void Main(string[] args)
         {
-            int playermove;
+            
             int[] Data = new int[3];
             
             Console.WriteLine("Willkommen bei Schere, Stein, Papier, Echse, Spock");
@@ -41,7 +41,7 @@ namespace SchereSteinPapierv2
             do
             {
                 Console.WriteLine("Gib deinen Zug ein (1 = Schere, 2 = Stein, 2 = Papier, 4 = Echse, 5 = Spock, 0 beendet das Spiel): ");
-                bool check = int.TryParse(Console.ReadLine(),out playermove);         //TODO: make string input(Schere, Stein etc.) possible
+                bool check = int.TryParse(Console.ReadLine(),out int playermove);         //TODO: make string input(Schere, Stein etc.) possible
                 if (check == true)
                 {
                     Array.Copy(Game(playermove), 0, Data, 0, 3);
