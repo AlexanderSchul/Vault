@@ -6,15 +6,22 @@ using System.Threading.Tasks;
 
 namespace SchereSteinPapier
 {
-    class Program
+    class Programv1
     {
         
-
+        enum Moves
+        {
+            Schere = 1,
+            Stein = 2,
+            Papier = 3,
+            Echse = 4,
+            Spock = 5,
+        }
         static void Main(string[] args)
         {
             string PlayerName;
 
-            string Continue ="";
+            
 
             string PlayerMove;
 
@@ -35,157 +42,163 @@ namespace SchereSteinPapier
             Console.Write("Gib deinen Spielernamen ein: ");
             PlayerName = Console.ReadLine();
             Random rnd = new Random();
+            Game();
 
-            while (Continue != "N")
+
+            void Game()
             {
-                
-                int PCmoveN = rnd.Next(0, 4);
-                Continue = "";
-                Console.WriteLine("Gib deinen Zug ein: ");
-                PlayerMove = Console.ReadLine();
-                //Console.WriteLine("Computer move is: " + Moves[PCmoveN]);
+                string Continue = "";
+
+                while (Continue != "N")
+                {
+
+                    int PCmoveN = rnd.Next(0, 4);
+                    Continue = "";
+                    Console.WriteLine("Gib deinen Zug ein: ");
+                    PlayerMove = Console.ReadLine();
+                    //Console.WriteLine("Computer move is: " + Moves[PCmoveN]);
 
                     if (PlayerMove == Moves[PCmoveN])
-                {
-                    Console.WriteLine("Gleicher Zug - Runde wird wiederholt");
-                    Continue = "Y";
-                }
+                    {
+                        Console.WriteLine("Gleicher Zug - Runde wird wiederholt");
+                        Continue = "Y";
+                    }
 
                     else if ((PlayerMove == "Schere" || PlayerMove == "schere") && Moves[PCmoveN] == "Papier")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Schere schneidet Papier - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Schere schneidet Papier - " + PlayerName + " gewinnt");
+                    }
 
 
                     else if ((PlayerMove == "Papier" || PlayerMove == "papier") && Moves[PCmoveN] == "Schere")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Schere schneidet Papier - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Schere schneidet Papier - Computer gewinnt");
+                    }
 
 
                     else if ((PlayerMove == "Papier" || PlayerMove == "papier") && Moves[PCmoveN] == "Stein")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Papier bedeckt Stein - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Papier bedeckt Stein - " + PlayerName + " gewinnt");
+                    }
 
                     else if ((PlayerMove == "Stein" || PlayerMove == "stein") && Moves[PCmoveN] == "Papier")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Papier bedeckt Stein - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Papier bedeckt Stein - Computer gewinnt");
+                    }
 
                     else if ((PlayerMove == "Stein" || PlayerMove == "stein") && Moves[PCmoveN] == "Echse")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Stein zerquetscht Echse - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Stein zerquetscht Echse - " + PlayerName + " gewinnt");
+                    }
 
                     else if ((PlayerMove == "Echse" || PlayerMove == "echse") && Moves[PCmoveN] == "Stein")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Stein zerquetscht Echse - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Stein zerquetscht Echse - Computer gewinnt");
+                    }
 
                     else if ((PlayerMove == "Echse" || PlayerMove == "echse") && Moves[PCmoveN] == "Spock")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Echse vergited Spock - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Echse vergited Spock - " + PlayerName + " gewinnt");
+                    }
 
                     else if ((PlayerMove == "Spock" || PlayerMove == "spock") && Moves[PCmoveN] == "Echse")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Echse vergited Spock - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Echse vergited Spock - Computer gewinnt");
+                    }
 
                     else if ((PlayerMove == "Spock" || PlayerMove == "spock") && Moves[PCmoveN] == "Schere")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Spock zertrümmert Schere - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Spock zertrümmert Schere - " + PlayerName + " gewinnt");
+                    }
 
                     else if ((PlayerMove == "Schere" || PlayerMove == "schere") && Moves[PCmoveN] == "Spock")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Spock zertrümmert Schere - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Spock zertrümmert Schere - Computer gewinnt");
+                    }
 
                     else if ((PlayerMove == "Schere" || PlayerMove == "schere") && Moves[PCmoveN] == "Echse")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Schere köpft Echse - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Schere köpft Echse - " + PlayerName + " gewinnt");
+                    }
 
                     else if ((PlayerMove == "Echse" || PlayerMove == "echse") && Moves[PCmoveN] == "Schere")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Schere köpft Echse - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Schere köpft Echse - Computer gewinnt");
+                    }
 
                     else if ((PlayerMove == "Echse" || PlayerMove == "echse") && Moves[PCmoveN] == "Papier")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Echse frisst Papier - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Echse frisst Papier - " + PlayerName + " gewinnt");
+                    }
 
                     else if ((PlayerMove == "Echse" || PlayerMove == "echse") && Moves[PCmoveN] == "Papier")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Echse frisst Papier - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Echse frisst Papier - Computer gewinnt");
+                    }
 
                     else if ((PlayerMove == "Papier" || PlayerMove == "papier") && Moves[PCmoveN] == "Spock")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Papier wiederlegt Spock - " + PlayerName + " gewinnt");
-                }
-                    else if ((PlayerMove == "Spock" || PlayerMove == "spock")  && Moves[PCmoveN] == "Papier")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Papier wiederlegt Spock - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Papier wiederlegt Spock - " + PlayerName + " gewinnt");
+                    }
+                    else if ((PlayerMove == "Spock" || PlayerMove == "spock") && Moves[PCmoveN] == "Papier")
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Papier wiederlegt Spock - Computer gewinnt");
+                    }
 
                     else if ((PlayerMove == "Spock" || PlayerMove == "spock") && Moves[PCmoveN] == "Stein")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Spock verdampft Stein - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Spock verdampft Stein - " + PlayerName + " gewinnt");
+                    }
 
                     else if ((PlayerMove == "Stein" || PlayerMove == "stein") && Moves[PCmoveN] == "Spock")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Spock verdampft Stein - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Spock verdampft Stein - Computer gewinnt");
+                    }
 
                     else if ((PlayerMove == "Stein" || PlayerMove == "stein") && Moves[PCmoveN] == "Schere")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Stein zertrümmert Schere - " + PlayerName + " gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Stein zertrümmert Schere - " + PlayerName + " gewinnt");
+                    }
 
                     else if ((PlayerMove == "Schere" || PlayerMove == "schere") && Moves[PCmoveN] == "Stein")
-                {
-                    Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
-                    Console.WriteLine("Stein zertrümmert Schere - Computer gewinnt");
-                }
+                    {
+                        Console.WriteLine("Computer spielt " + Moves[PCmoveN]);
+                        Console.WriteLine("Stein zertrümmert Schere - Computer gewinnt");
+                    }
 
-                    else 
-                {
-                    Console.WriteLine("ungültiger Zug");
-                }
+                    else
+                    {
+                        Console.WriteLine("ungültiger Zug");
+                    }
                     if (Continue != "Y")
-                {
-                    Console.WriteLine("_______________________________________________");
-                    Console.WriteLine("Enter zum weiterspielen. 'N' beendet das Spiel.");
-                    Continue = Console.ReadLine();
+                    {
+                        Console.WriteLine("_______________________________________________");
+                        Console.WriteLine("Enter zum weiterspielen. 'N' beendet das Spiel.");
+                        Continue = Console.ReadLine();
+                    }
+
                 }
-                
+
             }
-
-
 
 
 
