@@ -8,7 +8,8 @@ namespace SchereSteinPapier
 {
     class Program
     {
-
+        static string PlayerName;
+        static bool endgame = false;
         enum Moves
         {
             Schere = 1,
@@ -19,9 +20,6 @@ namespace SchereSteinPapier
         }
         static void Main(string[] args)
         {
-
-            int[] Data = new int[3];
-
             Console.WriteLine("Willkommen bei Schere, Stein, Papier, Echse, Spock");
             Console.WriteLine("Die Spielregeln lauten:");
             Console.WriteLine("Schere schneidet Papier");
@@ -36,195 +34,173 @@ namespace SchereSteinPapier
             Console.WriteLine("Stein zertrümmert Schere");
             Console.WriteLine("_____________________________");
             Console.Write("Gib deinen Spielernamen ein: ");
-            string PlayerName = Console.ReadLine();
+            PlayerName = Console.ReadLine();
 
             do
             {
-                Console.WriteLine("Gib deinen Zug ein (1 = Schere, 2 = Stein, 2 = Papier, 4 = Echse, 5 = Spock, 0 beendet das Spiel): ");
-                bool check = int.TryParse(Console.ReadLine(), out int playermove);
+                Console.WriteLine($"Gib deinen Zug ein ({(int)Moves.Schere} = Schere, {(int)Moves.Stein} = Stein, {(int)Moves.Papier} = Papier, {(int)Moves.Echse} = Echse, {(int)Moves.Spock} = Spock, 0 beendet das Spiel): ");
+
+                bool check = int.TryParse(Console.ReadLine(), out int move);
                 if (check == true)
                 {
-                    Array.Copy(Game(playermove), 0, Data, 0, 3);
-
-                    if (Data[2] == 1)
-                    {
-                        Console.WriteLine("Computer spielt " + Enum.GetName(typeof(Moves), Data[1]) + " und " + PlayerName + " spielt " + Enum.GetName(typeof(Moves), Data[0]));
-                        Console.WriteLine(Enum.GetName(typeof(Moves), Data[0]) + " schlägt " + Enum.GetName(typeof(Moves), Data[1]));
-                        Console.WriteLine(PlayerName + " gewinnt.");
-                        Console.WriteLine("____________________________________________________________");
-                    }
-                    else if (Data[2] == 0)
-                    {
-                        Console.WriteLine("Computer spielt " + Enum.GetName(typeof(Moves), Data[1]) + " und " + PlayerName + " spielt " + Enum.GetName(typeof(Moves), Data[0]));
-                        Console.WriteLine(Enum.GetName(typeof(Moves), Data[1]) + " schlägt " + Enum.GetName(typeof(Moves), Data[0]));
-                        Console.WriteLine("Computer gewinnt.");
-                        Console.WriteLine("____________________________________________________________");
-                    }
-                    else if (Data[2] == 2)
-                    {
-                        Console.WriteLine("Computer spielt " + Enum.GetName(typeof(Moves), Data[1]) + " und " + PlayerName + " spielt " + Enum.GetName(typeof(Moves), Data[0]));
-                        Console.WriteLine("Gleicher Zug, Runde wird wiederholt.");
-                        Console.WriteLine("____________________________________________________________");
-                    }
-                    else if (Data[2] == 4)
-                    {
-                        Console.WriteLine("Ungültiger Zug. Gib eine Zahl zwischen 0 und 5 ein.");
-                        Console.WriteLine("____________________________________________________________");
-                    }
+                    Round round = Game(move);
+                    Output(round);
                 }
+
                 else
                 {
                     Console.WriteLine("Ungültiger Zug. Gib eine Zahl zwischen 0 und 5 ein.");
+                    Console.WriteLine("____________________________________________________________");
                 }
 
-            } while (Data[2] != 3);
+            } while (endgame == false);
 
-            Console.WriteLine("Auf Wiedersehen " + PlayerName + "!");
+
+            Console.WriteLine($"Auf Wiedersehen {PlayerName}!");
             Console.ReadKey();
 
 
         }
 
+        static void Output(Round round)
+        {
+            if (round.winner == "end")
+            {
+                endgame = true;
+            }
+            else if (round.winner == "invalid")
+            {
+                Console.WriteLine("Ungültiger Zug. Gib eine Zahl zwischen 0 und 5 ein.");
+                Console.WriteLine("____________________________________________________________");
+            }
+            else if (round.winner == "none")
+            {
+                Console.WriteLine($"Computer spielt {round.PCMove()} und {PlayerName} spielt {round.PlayerMove()}");
+                Console.WriteLine("Gleicher Zug, Runde wird wiederholt.");
+                Console.WriteLine("____________________________________________________________");
+            }
+            else
+            {
+                Console.WriteLine($"Computer spielt {round.PCMove()} und {PlayerName} spielt {round.PlayerMove()}");
 
-        static Array Game(int Pmove)
+                if (round.winner == "Computer")
+                {
+                    Console.WriteLine($"{round.PCMove()} schlägt {round.PlayerMove()}!");
+                }
+                else
+                {
+                    Console.WriteLine($"{round.PlayerMove()} schlägt {round.PCMove()}");
+                }
+                Console.WriteLine($"{round.winner} gewinnt!");
+                Console.WriteLine("____________________________________________________________");
+            }
+        }
+        static Round Game(int Pmove)
         {
             Random rnd = new Random();
-            int[] gameData = new int[3];
             int PCmove = rnd.Next(1, 5);
+            Round round = new Round(Enum.GetName(typeof(Moves), Pmove), Enum.GetName(typeof(Moves), PCmove), null);
 
-            switch (Pmove)                   // gameData[2]: 0=loss, 1=win, 2=same, 3=end game, 4= invalid
+            if (Pmove == 0)
             {
-                case 0:
-                    gameData[2] = 3;
-                    break;
-
-                case 1:
-                    if (PCmove == 1)
-                    {
-                        gameData[2] = 2;
-                    }
-                    else if (PCmove == 2)
-                    {
-                        gameData[2] = 0;
-                    }
-                    else if (PCmove == 3)
-                    {
-                        gameData[2] = 1;
-                    }
-                    else if (PCmove == 4)
-                    {
-                        gameData[2] = 1;
-                    }
-                    else if (PCmove == 5)
-                    {
-                        gameData[2] = 0;
-                    }
-                    break;
-
-                case 2:
-                    if (PCmove == 1)
-                    {
-                        gameData[2] = 1;
-                    }
-                    else if (PCmove == 2)
-                    {
-                        gameData[2] = 2;
-                    }
-                    else if (PCmove == 3)
-                    {
-                        gameData[2] = 0;
-                    }
-                    else if (PCmove == 4)
-                    {
-                        gameData[2] = 1;
-                    }
-                    else if (PCmove == 5)
-                    {
-                        gameData[2] = 0;
-                    }
-                    break;
-
-                case 3:
-                    if (PCmove == 1)
-                    {
-                        gameData[2] = 0;
-                    }
-                    else if (PCmove == 2)
-                    {
-                        gameData[2] = 1;
-                    }
-                    else if (PCmove == 3)
-                    {
-                        gameData[2] = 2;
-                    }
-                    else if (PCmove == 4)
-                    {
-                        gameData[2] = 0;
-                    }
-                    else if (PCmove == 5)
-                    {
-                        gameData[2] = 0;
-                    }
-                    break;
-
-                case 4:
-                    if (PCmove == 1)
-                    {
-                        gameData[2] = 0;
-                    }
-                    else if (PCmove == 2)
-                    {
-                        gameData[2] = 0;
-                    }
-                    else if (PCmove == 3)
-                    {
-                        gameData[2] = 1;
-                    }
-                    else if (PCmove == 4)
-                    {
-                        gameData[2] = 2;
-                    }
-                    else if (PCmove == 5)
-                    {
-                        gameData[2] = 1;
-                    }
-                    break;
-
-                case 5:
-                    if (PCmove == 1)
-                    {
-                        gameData[2] = 1;
-                    }
-                    else if (PCmove == 2)
-                    {
-                        gameData[2] = 1;
-                    }
-                    else if (PCmove == 3)
-                    {
-                        gameData[2] = 0;
-                    }
-                    else if (PCmove == 4)
-                    {
-                        gameData[2] = 0;
-                    }
-                    else if (PCmove == 5)
-                    {
-                        gameData[2] = 2;
-                    }
-                    break;
-
-                default:
-                    gameData[2] = 4;
-                    break;
-
+                round.winner = "end";
+                return round;
             }
 
-            gameData[0] = Pmove;
-            gameData[1] = PCmove;
+            if (round.PlayerMove() == round.PCMove())
+            {
+                round.winner = "none";
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 1) && ((round.PCMove() == Enum.GetName(typeof(Moves), 3)) || round.PCMove() == Enum.GetName(typeof(Moves), 4)))
+            {
+                round.winner = PlayerName;
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 1) && ((round.PCMove() == Enum.GetName(typeof(Moves), 2)) || round.PCMove() == Enum.GetName(typeof(Moves), 5)))
+            {
+                round.winner = "Computer";
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 2) && ((round.PCMove() == Enum.GetName(typeof(Moves), 1)) || round.PCMove() == Enum.GetName(typeof(Moves), 4)))
+            {
+                round.winner = PlayerName;
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 2) && ((round.PCMove() == Enum.GetName(typeof(Moves), 3)) || round.PCMove() == Enum.GetName(typeof(Moves), 5)))
+            {
+                round.winner = "Computer";
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 3) && ((round.PCMove() == Enum.GetName(typeof(Moves), 2)) || round.PCMove() == Enum.GetName(typeof(Moves), 5)))
+            {
+                round.winner = PlayerName;
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 3) && ((round.PCMove() == Enum.GetName(typeof(Moves), 1)) || round.PCMove() == Enum.GetName(typeof(Moves), 4)))
+            {
+                round.winner = "Computer";
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 4) && ((round.PCMove() == Enum.GetName(typeof(Moves), 3)) || round.PCMove() == Enum.GetName(typeof(Moves), 5)))
+            {
+                round.winner = PlayerName;
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 4) && ((round.PCMove() == Enum.GetName(typeof(Moves), 1)) || round.PCMove() == Enum.GetName(typeof(Moves), 2)))
+            {
+                round.winner = "Computer";
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 5) && ((round.PCMove() == Enum.GetName(typeof(Moves), 1)) || round.PCMove() == Enum.GetName(typeof(Moves), 2)))
+            {
+                round.winner = PlayerName;
+                return round;
+            }
+            else if (round.PlayerMove() == Enum.GetName(typeof(Moves), 5) && ((round.PCMove() == Enum.GetName(typeof(Moves), 3)) || round.PCMove() == Enum.GetName(typeof(Moves), 4)))
+            {
+                round.winner = "Computer";
+                return round;
+            }
+            else
+            {
+                round.winner = "invalid";
+                return round;
+            }
+           
 
-            return gameData;
+        }
 
+        
+    
 
+    }
+
+    class Round
+    {
+        private readonly string playermove;
+        private readonly string pcmove;
+        public string winner;
+       
+        public Round(string playermove, string pcmove, string winner)
+        {
+            this.playermove = playermove;
+            this.pcmove = pcmove;
+            this.winner = winner;
+        }
+        public string PlayerMove()
+        {
+            return playermove;
+        }
+
+        public string PCMove()
+        {
+            return pcmove;
+        }
+       
+        public string Winner()
+        {
+            return winner;
         }
     }
 }
