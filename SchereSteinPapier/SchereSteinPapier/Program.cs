@@ -6,19 +6,22 @@ using System.Threading.Tasks;
 
 namespace SchereSteinPapier
 {
+    enum Moves
+    {
+        Schere = 1,
+        Stein = 2,
+        Papier = 3,
+        Echse = 4,
+        Spock = 5,
+    }
+    enum Results { win, loss, draw }
     class Program
     {
         static string PlayerName;
         static bool endgame = false;
         static Move[] Instances = new Move[5];
-        enum Moves
-        {
-            Schere = 1,
-            Stein = 2,
-            Papier = 3,
-            Echse = 4,
-            Spock = 5,
-        }
+        
+       
         static void Main(string[] args)
         {
             Init();
@@ -52,10 +55,10 @@ namespace SchereSteinPapier
                     else
                     {
                         Random rnd = new Random();
-                        int PCmove = rnd.Next(1, 5);
+                        int PCmove = rnd.Next(1, 6);
                         Move mov = Instances[move - 1];
-                        string result = mov.Check(PCmove);
-                        Output(result, PCmove, move);
+                        //string result = mov.Check(PCmove).ToString();
+                        Output(mov.Check(PCmove), PCmove, move);
                     }
                 }
 
@@ -75,40 +78,40 @@ namespace SchereSteinPapier
         }
         static void Init()
         {
-            int[] winners = new int[] { 3, 4 };
-            int[] losers = new int[] { 2, 5 };
-            Move Schere = new Move(winners, losers, 1);
+            Moves[] winners = new Moves[] { Moves.Papier, Moves.Echse };
+            Moves[] losers = new Moves[] { Moves.Stein, Moves.Spock };
+            Move Schere = new Move(winners, losers, Moves.Schere);
             Instances[0] = Schere;
-            winners = new int[] { 1, 4 };
-            losers = new int[] { 3, 5 };
-            Move Stein = new Move(winners, losers, 2);
+            winners = new Moves[] { Moves.Schere, Moves.Echse };
+            losers = new Moves[] { Moves.Papier, Moves.Spock };
+            Move Stein = new Move(winners, losers, Moves.Stein);
             Instances[1] = Stein;
-            winners = new int[] { 2, 5 };
-            losers = new int[] { 1, 5 };
-            Move Papier = new Move(winners, losers, 3);
+            winners = new Moves[] { Moves.Stein, Moves.Spock };
+            losers = new Moves[] { Moves.Schere, Moves.Echse };
+            Move Papier = new Move(winners, losers, Moves.Papier);
             Instances[2] = Papier;
-            winners = new int[] { 3, 5 };
-            losers = new int[] { 1, 2 };
-            Move Echse = new Move(winners, losers, 4);
+            winners = new Moves[] { Moves.Papier, Moves.Spock };
+            losers = new Moves[] { Moves.Schere, Moves.Stein };
+            Move Echse = new Move(winners, losers, Moves.Echse);
             Instances[3] = Echse;
-            winners = new int[] { 1, 2 };
-            losers = new int[] { 3, 4 };
-            Move Spock = new Move(winners, losers, 5);
+            winners = new Moves[] { Moves.Schere, Moves.Stein };
+            losers = new Moves[] { Moves.Papier, Moves.Echse };
+            Move Spock = new Move(winners, losers, Moves.Spock);
             Instances[4] = Spock;
+            
         }
-        static void Output(string result, int pcmove, int move)
+        static void Output(Enum result, int pcmove, int move)
         {
             string playermove = Enum.GetName(typeof(Moves), move);
             string computermove = Enum.GetName(typeof(Moves), pcmove);
             Console.WriteLine($"Computer spielt {computermove} und {PlayerName} spielt {playermove}");
 
-            if (result == "draw")
+            if (result.Equals(Results.draw))
             {
-               
                 Console.WriteLine("Gleicher Zug, Runde wird wiederholt.");
-                Console.WriteLine("____________________________________________________________");
+                
             }
-            else if (result == "loss")
+            else if (result.Equals(Results.loss))
             {
                 Console.WriteLine($"{playermove} schlägt {computermove}!");
                 Console.WriteLine($"{PlayerName} gewinnt!");
@@ -118,6 +121,7 @@ namespace SchereSteinPapier
                 Console.WriteLine($"{computermove} schlägt {playermove}!");
                 Console.WriteLine($"Computer gewinnt!");
             }
+            Console.WriteLine("____________________________________________________________");
         }
         
 
@@ -128,44 +132,48 @@ namespace SchereSteinPapier
 
     class Move
     {
-        int[] winners;
-        int[] losers;
-        int self;
-        public Move(int[] winners, int[] losers, int self)
+        
+        Moves[] winners;
+        Moves[] losers;
+        Moves self;
+        
+
+        public Move(Moves[] winners, Moves[] losers, Moves self)
         {
             this.winners = winners;
             this.losers = losers;
             this.self = self;
         }
 
-        public int Self()
+        public Moves Self()
         {
             return self;
         }
 
-        public int[] Winners
+        public Moves[] Winners
         {
             get { return winners; }
             set { winners = value; }
         }
-        public int[] Losers
+        public Moves[] Losers
         {
             get { return losers; }
             set { losers = value; }
         }
-        public string Check(int PCmove)
+        public Enum Check(int PCmove)
         {            
-            if(self == PCmove)
+            if(Enum.GetName(typeof(Moves), self) == Enum.GetName(typeof(Moves), PCmove))
             {
-                return "draw";
+                return Results.draw;
+
             }
-            else if (winners.Contains(PCmove))
+            else if (Array.ConvertAll(winners, value => (int) value).Contains(PCmove))
             {
-                return "loss";
+                return Results.loss;
             }
             else
             {
-                return "win";
+                return Results.win;
             }
         }
     }
