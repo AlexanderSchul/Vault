@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace SchereSteinPapier
 {
@@ -15,16 +18,29 @@ namespace SchereSteinPapier
         Spock = 5,
     }
     enum Results { win, loss, draw }
+     public class Round
+    {
+        public string Playername { get; set; }
+        public int Playermove { get; set; }
+        public Enum[] Result { get; set; }
+    }
+
     class Program
     {
         static string PlayerName;
         static bool endgame = false;
-        static Move[] Instances = new Move[5];
-        
-       
-        static void Main(string[] args)
+
+        static HttpClient client = new HttpClient();
+
+        static async Task Main(string[] args)
         {
-            Init();
+            //Init();
+
+            client.BaseAddress = new Uri("http://localhost:2954/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            
             Console.WriteLine("Willkommen bei Schere, Stein, Papier, Echse, Spock");
             Console.WriteLine("Die Spielregeln lauten:");
             Console.WriteLine("Schere schneidet Papier");
@@ -41,12 +57,13 @@ namespace SchereSteinPapier
             Console.Write("Gib deinen Spielernamen ein: ");
             PlayerName = Console.ReadLine();
 
+
             do
             {
                 Console.WriteLine($"Gib deinen Zug ein ({(int)Moves.Schere} = Schere, {(int)Moves.Stein} = Stein, {(int)Moves.Papier} = Papier, {(int)Moves.Echse} = Echse, {(int)Moves.Spock} = Spock, 0 beendet das Spiel): ");
 
                 bool check = int.TryParse(Console.ReadLine(), out int move);
-                if (check == true && move<=5 && move>=0)
+                if (check == true && move <= 5 && move >= 0)
                 {
                     if (move == 0)
                     {
@@ -54,11 +71,12 @@ namespace SchereSteinPapier
                     }
                     else
                     {
-                        Random rnd = new Random();
-                        int PCmove = rnd.Next(1, 6);
-                        Move mov = Instances[move - 1];
-                        //string result = mov.Check(PCmove).ToString();
-                        Output(mov.Check(PCmove), PCmove, move);
+                        await SendMove(move);
+                        await SendName(PlayerName);
+                        Enum[] result = await GetResult("Controllers/GameController.cs/[output]");
+                      
+
+                        Output(result[1],result[2], move);
                     }
                 }
 
@@ -76,31 +94,31 @@ namespace SchereSteinPapier
 
 
         }
-        static void Init()
+
+        
+        static async Task<Uri> SendMove(int playermove) 
         {
-            Moves[] winners = new Moves[] { Moves.Papier, Moves.Echse };
-            Moves[] losers = new Moves[] { Moves.Stein, Moves.Spock };
-            Move Schere = new Move(winners, losers, Moves.Schere);
-            Instances[0] = Schere;
-            winners = new Moves[] { Moves.Schere, Moves.Echse };
-            losers = new Moves[] { Moves.Papier, Moves.Spock };
-            Move Stein = new Move(winners, losers, Moves.Stein);
-            Instances[1] = Stein;
-            winners = new Moves[] { Moves.Stein, Moves.Spock };
-            losers = new Moves[] { Moves.Schere, Moves.Echse };
-            Move Papier = new Move(winners, losers, Moves.Papier);
-            Instances[2] = Papier;
-            winners = new Moves[] { Moves.Papier, Moves.Spock };
-            losers = new Moves[] { Moves.Schere, Moves.Stein };
-            Move Echse = new Move(winners, losers, Moves.Echse);
-            Instances[3] = Echse;
-            winners = new Moves[] { Moves.Schere, Moves.Stein };
-            losers = new Moves[] { Moves.Papier, Moves.Echse };
-            Move Spock = new Move(winners, losers, Moves.Spock);
-            Instances[4] = Spock;
-            
+            HttpResponseMessage response = await client.PostAsJsonAsync("api/Game", playermove);
+            response.EnsureSuccessStatusCode();
+            return response.Headers.Location;
         }
-        static void Output(Enum result, int pcmove, int move)
+        static async Task<Uri> SendName(string playername)
+        {
+            HttpResponseMessage response = await client.PostAsJsonAsync("Game/[playername]", playername);
+            response.EnsureSuccessStatusCode();
+            return response.Headers.Location;
+        }
+        static async Task<Enum[]> GetResult(string path) 
+        {
+            Enum[] result = null;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                result = await response.Content.ReadAsAsync<Enum[]>();
+            }
+            return result;
+        }
+        static void Output(Enum result, Enum pcmove, int move)
         {
             string playermove = Enum.GetName(typeof(Moves), move);
             string computermove = Enum.GetName(typeof(Moves), pcmove);
@@ -109,7 +127,7 @@ namespace SchereSteinPapier
             if (result.Equals(Results.draw))
             {
                 Console.WriteLine("Gleicher Zug, Runde wird wiederholt.");
-                
+
             }
             else if (result.Equals(Results.loss))
             {
@@ -123,63 +141,5 @@ namespace SchereSteinPapier
             }
             Console.WriteLine("____________________________________________________________");
         }
-        
-
-        
-    
-
-    }
-
-    class Move
-    {
-        
-        Moves[] winners;
-        Moves[] losers;
-        Moves self;
-        
-
-        public Move(Moves[] winners, Moves[] losers, Moves self)
-        {
-            this.winners = winners;
-            this.losers = losers;
-            this.self = self;
-        }
-
-        public Moves Self()
-        {
-            return self;
-        }
-
-        public Moves[] Winners
-        {
-            get { return winners; }
-            set { winners = value; }
-        }
-        public Moves[] Losers
-        {
-            get { return losers; }
-            set { losers = value; }
-        }
-        public Enum Check(int PCmove)
-        {            
-            if(Enum.GetName(typeof(Moves), self) == Enum.GetName(typeof(Moves), PCmove))
-            {
-                return Results.draw;
-
-            }
-            else if (Array.ConvertAll(winners, value => (int) value).Contains(PCmove))
-            {
-                return Results.loss;
-            }
-            else
-            {
-                return Results.win;
-            }
-        }
-    }
-
-    
-    
-
-    
+    } 
 }
