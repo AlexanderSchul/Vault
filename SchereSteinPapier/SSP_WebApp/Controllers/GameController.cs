@@ -1,13 +1,14 @@
-﻿using System;
+﻿using SSP_WebApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using SSP_WebApp.Models;
 
 namespace SSP_WebApp.Controllers
 {
+
     enum Moves
     {
         Schere = 1,
@@ -18,26 +19,76 @@ namespace SSP_WebApp.Controllers
     }
     enum Results { win, loss, draw }
 
+    class Move
+    {
+
+        Moves[] winners;
+        Moves[] losers;
+        Moves self;
+
+
+        public Move(Moves[] winners, Moves[] losers, Moves self)
+        {
+            this.winners = winners;
+            this.losers = losers;
+            this.self = self;
+        }
+
+        public Moves Self()
+        {
+            return self;
+        }
+
+        public Moves[] Winners
+        {
+            get { return winners; }
+            set { winners = value; }
+        }
+
+        public Moves[] Losers
+        {
+            get { return losers; }
+            set { losers = value; }
+        }
+
+        public Enum Check(int PCmove)
+        {
+            if (Enum.GetName(typeof(Moves), self) == Enum.GetName(typeof(Moves), PCmove))
+            {
+                return Results.draw;
+
+            }
+            else if (Array.ConvertAll(winners, value => (int)value).Contains(PCmove))
+            {
+                return Results.loss;
+            }
+            else
+            {
+                return Results.win;
+            }
+        }
+    }
+
 
     public class GameController : ApiController
     {
 
-        Round round = new Round();
-        static Move[] Instances = new Move[5];
-        public IHttpActionResult Game(int playermove)
+        public IHttpActionResult GetGameResult(int id)
         {
-            //playername = round.Playername;
-            //playermove = round.Playermove;
-            Move mov = Instances[playermove - 1];
             Init();
+            Move mov = Instances[id - 1];
+            
             Random rnd = new Random();
             int PCmove = rnd.Next(1, 6);
+            Enum result = mov.Check(PCmove);
+            string erg = result.ToString();
 
-            round.Result = new Enum[2];
-            round.Result[1] = mov.Check(PCmove);
-            round.Result[2] = (Moves)PCmove;
-            return Ok(round.Result);
+            var game = new Game { Id = 444, playerName = "Player 1", playerMove = id, computerMove = PCmove, result = erg };
+            return Ok(game);
         }
+
+
+        static Move[] Instances = new Move[5];
         static void Init()
         {
             Moves[] winners = new Moves[] { Moves.Papier, Moves.Echse };
@@ -63,53 +114,5 @@ namespace SSP_WebApp.Controllers
 
         }
 
-
-        class Move
-        {
-
-            Moves[] winners;
-            Moves[] losers;
-            Moves self;
-
-
-            public Move(Moves[] winners, Moves[] losers, Moves self)
-            {
-                this.winners = winners;
-                this.losers = losers;
-                this.self = self;
-            }
-
-            public Moves Self()
-            {
-                return self;
-            }
-
-            public Moves[] Winners
-            {
-                get { return winners; }
-                set { winners = value; }
-            }
-            public Moves[] Losers
-            {
-                get { return losers; }
-                set { losers = value; }
-            }
-            public Enum Check(int PCmove)
-            {
-                if (Enum.GetName(typeof(Moves), self) == Enum.GetName(typeof(Moves), PCmove))
-                {
-                    return Results.draw;
-
-                }
-                else if (Array.ConvertAll(winners, value => (int)value).Contains(PCmove))
-                {
-                    return Results.loss;
-                }
-                else
-                {
-                    return Results.win;
-                }
-            }
-        }
     }
 }

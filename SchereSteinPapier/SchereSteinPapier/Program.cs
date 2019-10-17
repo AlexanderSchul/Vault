@@ -9,6 +9,15 @@ using System.Net.Http;
 
 namespace SchereSteinPapier
 {
+    public class Game
+    {
+        public int Id { get; set; }
+        public string playerName { get; set; }
+        public int playerMove { get; set; }
+        public int computerMove { get; set; }
+        public string result { get; set; }
+
+    }
     enum Moves
     {
         Schere = 1,
@@ -71,12 +80,11 @@ namespace SchereSteinPapier
                     }
                     else
                     {
-                        await SendMove(move);
-                        await SendName(PlayerName);
-                        Enum[] result = await GetResult("Controllers/GameController.cs/[output]");
+                        
+                        Game result = await GetResult(move);
                       
 
-                        Output(result[1],result[2], move);
+                        Output(result);
                     }
                 }
 
@@ -96,40 +104,29 @@ namespace SchereSteinPapier
         }
 
         
-        static async Task<Uri> SendMove(int playermove) 
+    
+        static async Task<Game> GetResult(int playermove) 
         {
-            HttpResponseMessage response = await client.PostAsJsonAsync("api/Game", playermove);
-            response.EnsureSuccessStatusCode();
-            return response.Headers.Location;
-        }
-        static async Task<Uri> SendName(string playername)
-        {
-            HttpResponseMessage response = await client.PostAsJsonAsync("Game/[playername]", playername);
-            response.EnsureSuccessStatusCode();
-            return response.Headers.Location;
-        }
-        static async Task<Enum[]> GetResult(string path) 
-        {
-            Enum[] result = null;
-            HttpResponseMessage response = await client.GetAsync(path);
+            Game result = null;
+            HttpResponseMessage response = await client.GetAsync("api/Game/"+ playermove);
             if (response.IsSuccessStatusCode)
             {
-                result = await response.Content.ReadAsAsync<Enum[]>();
+                result = await response.Content.ReadAsAsync<Game>();
             }
             return result;
         }
-        static void Output(Enum result, Enum pcmove, int move)
+        static void Output(Game result)
         {
-            string playermove = Enum.GetName(typeof(Moves), move);
-            string computermove = Enum.GetName(typeof(Moves), pcmove);
+            string playermove = Enum.GetName(typeof(Moves), result.playerMove);
+            string computermove = Enum.GetName(typeof(Moves), result.computerMove);
             Console.WriteLine($"Computer spielt {computermove} und {PlayerName} spielt {playermove}");
 
-            if (result.Equals(Results.draw))
+            if (result.result == "draw")
             {
                 Console.WriteLine("Gleicher Zug, Runde wird wiederholt.");
 
             }
-            else if (result.Equals(Results.loss))
+            else if (result.result == "loss")
             {
                 Console.WriteLine($"{playermove} schlägt {computermove}!");
                 Console.WriteLine($"{PlayerName} gewinnt!");

@@ -5,12 +5,13 @@ using System.Web;
 
 namespace SSP_WebApp.Models
 {
-    
-    public class Round
+    public class Game
     {
-        public string Playername { get; set; }
-        public int Playermove { get; set; }
-        public Enum[] Result { get; set; }
-    }
+        public int Id { get; set; }
+        public string playerName { get; set; }
+        public int playerMove { get; set; }
+        public int computerMove { get; set; }
+        public string result { get; set; }
 
+    }
 }
