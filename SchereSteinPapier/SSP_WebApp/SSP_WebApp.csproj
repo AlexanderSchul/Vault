@@ -80,7 +80,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Echse.png" />
     <Content Include="Global.asax" />
+    <Content Include="Papier.png" />
+    <Content Include="Schere.png" />
+    <Content Include="Spock.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Stein.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,56 @@
+﻿<Page x:Class="SSPWPF.SSPWPFHome"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SSPWPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="800"
+      Title="SSPWPF - Home">
+
+    <Grid Margin="10,0,10,10" Height="550">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListBox HorizontalAlignment="Left" Height="232" Margin="510,101,0,0" Grid.Row="1" VerticalAlignment="Top" Width="188">
+            <ListBoxItem>
+                <Bold>Die Spielregeln lauten:</Bold>
+            </ListBoxItem>
+            <ListBoxItem>Schere schneidet Papier</ListBoxItem>
+            <ListBoxItem>Papier bedeckt Stein</ListBoxItem>
+            <ListBoxItem>Stein zerquetscht Echse</ListBoxItem>
+            <ListBoxItem>Echse vergiftet Spock</ListBoxItem>
+            <ListBoxItem>Spock zertrümmert Schere</ListBoxItem>
+            <ListBoxItem>Schere köpft Echse</ListBoxItem>
+            <ListBoxItem>Echse frisst Papier</ListBoxItem>
+            <ListBoxItem>Papier widerlegt Spock</ListBoxItem>
+            <ListBoxItem>Spock verdampft Stein</ListBoxItem>
+            <ListBoxItem>Stein zertrümmert Schere</ListBoxItem>
+        </ListBox>
+
+        <TextBlock x:Name="PlayerMove" HorizontalAlignment="Left" Height="22" Margin="59,105,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="Wähle deinen Zug" VerticalAlignment="Top" Width="101"/>
+        <TextBox x:Name="Winner" HorizontalAlignment="Left" Height="42" Margin="216,291,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="242"/>
+        <TextBox x:Name="Move" HorizontalAlignment="Left" Height="41" Margin="216,245,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="242"/>
+        <TextBox x:Name="PlayerName" HorizontalAlignment="Left" Height="26" Margin="98,36,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="122"/>
+        <Button x:Name="Schere" Content="Schere" HorizontalAlignment="Left" Height="50" Margin="73,144,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="87" Click="Schere_Click"/>
+        <Button x:Name="Stein" Content="Stein" HorizontalAlignment="Left" Height="50" Margin="73,199,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="87" Click="Stein_Click"/>
+        <Button x:Name="Papier" Content="Papier" HorizontalAlignment="Left" Height="50" Margin="73,254,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="87" Click="Papier_Click"/>
+        <Button x:Name="Echse" Content="Echse" HorizontalAlignment="Left" Height="50" Margin="73,309,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="87" Click="Echse_Click"/>
+        <Button x:Name="Spock" Content="Spock" HorizontalAlignment="Left" Height="50" Margin="73,364,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="87" Click="Spock_Click"/>
+
+
+
+        <TextBlock HorizontalAlignment="Left" Height="26" Margin="15,36,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="Spielername:" VerticalAlignment="Top" Width="83"/>
+        <Button x:Name="Close" Content="Beenden" HorizontalAlignment="Left" Height="51" Margin="572,383,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="126" Click="Close_Click"/>
+        <TextBox x:Name="ScoreBox" HorizontalAlignment="Left" Height="18" Margin="314,154,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"/>
+        <TextBlock HorizontalAlignment="Left" Height="18" Margin="314,131,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="Spielstand:" VerticalAlignment="Top" Width="60" RenderTransformOrigin="-0.517,0.222"/>
+        <TextBlock x:Name="ScorePlayerName" HorizontalAlignment="Left" Height="18" Margin="271,154,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="Spieler" VerticalAlignment="Top" Width="38"/>
+        <TextBlock HorizontalAlignment="Left" Height="18" Margin="379,154,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="Computer" VerticalAlignment="Top" Width="56"/>
+
+    </Grid>
+</Page>
